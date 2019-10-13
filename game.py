@@ -1,4 +1,13 @@
+from enum import Enum
+
+
 class Game:
+    class GameStatus(Enum):
+        NO_WIN = 0
+        WIN_P_ONE = 1
+        WIN_P_TWO = 2
+        WIN_BOTH = 3
+
     class AlreadyExist(Exception):
         pass
 
@@ -19,7 +28,7 @@ class Game:
             self.place.append(list())
             self.place[x] = [self.space] * self.size
 
-    def print(self):
+    def print_field(self):
         for x in range(self.size):
             for y in range(self.size):
                 print(self.place[x][y], end=self.space)
@@ -44,7 +53,7 @@ class Game:
     def check(self):
         # Свободные поля
         if self.emptyFields == 0:
-            return "Players don't win!"
+            return self.GameStatus.NO_WIN
 
         # Горизонталь
         for i in range(self.size):
@@ -58,7 +67,11 @@ class Game:
                     break
 
             if flag is True:
-                return "Player {} win!".format(self.place[i][j])
+                if self.place[i][j] == self.playerOne:
+                    return self.GameStatus.WIN_P_ONE
+                else:
+                    return self.GameStatus.WIN_P_TWO
+                # return "Player {} win!".format()
         # Вертикаль
         for j in range(self.size):
             flag = True
@@ -71,7 +84,11 @@ class Game:
                     break
 
             if flag is True:
-                return "Player {} win!".format(self.place[i][j])
+                if self.place[i][j] == self.playerOne:
+                    return self.GameStatus.WIN_P_ONE
+                else:
+                    return self.GameStatus.WIN_P_TWO
+                # return "Player {} win!".format(self.place[i][j])
         # Диагональ
         flag = True
         for i in range(1, self.size):
@@ -82,7 +99,11 @@ class Game:
                 flag = False
                 break
         if flag is True:
-            return "Player {} win!".format(self.place[i][i])
+            if self.place[i][i] == self.playerOne:
+                return self.GameStatus.WIN_P_ONE
+            else:
+                return self.GameStatus.WIN_P_TWO
+            # return "Player {} win!".format(self.place[i][i])
 
         # Побочная диагональ
         flag = True
@@ -94,7 +115,11 @@ class Game:
                 flag = False
                 break
         if flag is True:
-            return "Player {} win!".format(self.place[self.size-i][i-1])
+            if self.place[self.size-i][i-1] == self.playerOne:
+                return self.GameStatus.WIN_P_ONE
+            else:
+                return self.GameStatus.WIN_P_TWO
+            # return "Player {} win!".format(self.place[self.size-i][i-1])
 
         return False
 
@@ -129,7 +154,7 @@ rogatzkij(2019)
             print("Write only numbers. Try again!")
             continue
 
-        game.print()
+        game.print_field()
         game.changePlayers()
 
         result = game.check()
