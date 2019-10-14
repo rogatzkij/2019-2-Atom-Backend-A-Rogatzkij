@@ -1,4 +1,5 @@
 game/
+venv/
 .vscode/
 *.pyc
 *.swo
